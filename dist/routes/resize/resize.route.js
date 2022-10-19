@@ -41,41 +41,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var sharp_1 = __importDefault(require("sharp"));
+var check_if_img_processed_1 = __importDefault(require("../../middelware/check_if_img_processed"));
+var check_if_img_exist_1 = __importDefault(require("../../middelware/check_if_img_exist"));
+var check_all_query_available_1 = __importDefault(require("../../middelware/check_all_query_available"));
 var router = express_1.default.Router();
-function resizeImage(path, width, height) {
+function resizeImage(name, width, height) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, (0, sharp_1.default)("fjord.jpg")
+                    return [4 /*yield*/, (0, sharp_1.default)(__dirname + '/../../../assets/fjord.jpg')
                             .resize({
-                            width: 150,
-                            height: 97
+                            width: 200,
+                            height: 200,
                         })
-                            .toFile("sammy-resized.jpg")];
+                            .toFile(__dirname + "/../../../processed-imgs/".concat(name, "-").concat(width, "-").concat(height, ".jpg"))];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
                     console.log(error_1);
-                    return [3 /*break*/, 3];
+                    throw 'ERROR';
                 case 3: return [2 /*return*/];
             }
         });
     });
 }
-router.get('/', function (req, res) {
-    console.log("start");
-    try {
-        yield resizeImage("", "", "");
-        console.log("done");
-        res.send({ status: "Done" });
-    }
-    catch (error) {
-        res.send({ status: "ERROR" });
-    }
-});
+router.get('/?', check_all_query_available_1.default, check_if_img_processed_1.default, check_if_img_exist_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('file exist = ', req.file_exist);
+                console.log('start');
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, resizeImage('test', '150', '97')];
+            case 2:
+                _a.sent();
+                console.log('done');
+                res.send({ status: 'Done' });
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                res.send({ status: 'ERROR' });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 exports.default = router;

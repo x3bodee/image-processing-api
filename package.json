@@ -9,7 +9,7 @@
     "lint": "eslint src/*.ts",
     "lint:f": "eslint src/*.ts --fix",
     "jasmine": "jasmine",
-    "watch": "nodemon -e ts -w ./src -x npm run watch:serve",
+    "node": "nodemon -e ts -w ./src -x npm run watch:serve",
     "watch:serve": "ts-node src/index.ts",
     "test": "npm run build && npm run jasmine"
   },
