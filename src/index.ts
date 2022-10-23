@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import resize from './routes/resize/resize.route';
 
 const app = express();

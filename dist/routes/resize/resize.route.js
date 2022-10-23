@@ -47,44 +47,52 @@ var check_all_query_available_1 = __importDefault(require("../../middelware/chec
 var router = express_1.default.Router();
 function resizeImage(name, width, height) {
     return __awaiter(this, void 0, void 0, function () {
-        var error_1;
+        var width_i, height_i, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, (0, sharp_1.default)(__dirname + '/../../../assets/fjord.jpg')
+                    width_i = parseInt(width);
+                    height_i = parseInt(height);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, (0, sharp_1.default)(__dirname + '/../../../assets/' + name + '.jpg')
                             .resize({
-                            width: 200,
-                            height: 200,
+                            width: width_i,
+                            height: height_i,
                         })
                             .toFile(__dirname + "/../../../processed-imgs/".concat(name, "-").concat(width, "-").concat(height, ".jpg"))];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
                 case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
                     error_1 = _a.sent();
                     console.log(error_1);
                     throw 'ERROR';
-                case 3: return [2 /*return*/];
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
 router.get('/?', check_all_query_available_1.default, check_if_img_processed_1.default, check_if_img_exist_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_2;
+    var name, width, height, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log('file exist = ', req.file_exist);
+                console.log('file exist in assets = ', req.file_exist);
+                console.log("".concat(req.query.name, "-").concat(req.query.width, "-").concat(req.query.height));
+                name = req.query.name;
+                width = req.query.width;
+                height = req.query.height;
                 console.log('start');
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, resizeImage('test', '150', '97')];
+                return [4 /*yield*/, resizeImage(name, width, height)];
             case 2:
                 _a.sent();
                 console.log('done');
-                res.send({ status: 'Done' });
+                res.send({ status: true, msg: "Done" });
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();
