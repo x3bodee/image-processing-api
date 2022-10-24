@@ -41,30 +41,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var sharp_1 = __importDefault(require("sharp"));
+var path_1 = __importDefault(require("path"));
 var check_if_img_processed_1 = __importDefault(require("../../middelware/check_if_img_processed"));
 var check_if_img_exist_1 = __importDefault(require("../../middelware/check_if_img_exist"));
 var check_all_query_available_1 = __importDefault(require("../../middelware/check_all_query_available"));
 var router = express_1.default.Router();
 function resizeImage(name, width, height) {
     return __awaiter(this, void 0, void 0, function () {
-        var width_i, height_i, error_1;
+        var width_i, height_i, file_path, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     width_i = parseInt(width);
                     height_i = parseInt(height);
+                    file_path = path_1.default.join(__dirname + "/../../../processed-imgs/".concat(name, "-").concat(width, "-").concat(height, ".jpg"));
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, (0, sharp_1.default)(__dirname + '/../../../assets/' + name + '.jpg')
+                    return [4 /*yield*/, (0, sharp_1.default)(path_1.default.join(__dirname + '/../../../assets/' + name + '.jpg'))
                             .resize({
                             width: width_i,
                             height: height_i,
                         })
-                            .toFile(__dirname + "/../../../processed-imgs/".concat(name, "-").concat(width, "-").concat(height, ".jpg"))];
+                            .toFile(file_path)];
                 case 2:
                     _a.sent();
-                    return [3 /*break*/, 4];
+                    return [2 /*return*/, file_path];
                 case 3:
                     error_1 = _a.sent();
                     console.log(error_1);
@@ -75,7 +77,7 @@ function resizeImage(name, width, height) {
     });
 }
 router.get('/?', check_all_query_available_1.default, check_if_img_processed_1.default, check_if_img_exist_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, width, height, error_2;
+    var name, width, height, file_path, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -90,9 +92,9 @@ router.get('/?', check_all_query_available_1.default, check_if_img_processed_1.d
                 _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, resizeImage(name, width, height)];
             case 2:
-                _a.sent();
+                file_path = _a.sent();
                 console.log('done');
-                res.send({ status: true, msg: "Done" });
+                res.status(200).sendFile(path_1.default.resolve(file_path));
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();
