@@ -15,9 +15,9 @@ async function resizeImage(
   const width_i: number = parseInt(width);
   const height_i: number = parseInt(height);
   const file_path: string =
-    __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg`;
+  path.join( __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg` );
   try {
-    await sharp(__dirname + '/../../../assets/' + name + '.jpg')
+    await sharp(path.join(__dirname + '/../../../assets/' + name + '.jpg'))
       .resize({
         width: width_i,
         height: height_i,
