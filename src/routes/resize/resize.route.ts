@@ -8,25 +8,29 @@ import check_Query from '../../middelware/check_all_query_available';
 const router = express.Router();
 
 async function resizeImage(
+  req: Request,
+  res: Response,
   name: string,
   width: string,
   height: string
 ): Promise<string> {
   const width_i: number = parseInt(width);
   const height_i: number = parseInt(height);
-  const file_path: string =
-  path.join( __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg` );
+  const file_path: string = path.join( __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg` );
   try {
-    await sharp(path.join(__dirname + '/../../../assets/' + name + '.jpg'))
+    if (req.error) return "error";
+    else {
+
+      await sharp(path.join(__dirname + '/../../../assets/' + name + '.jpg'))
       .resize({
         width: width_i,
         height: height_i,
       })
       .toFile(file_path);
-    return file_path;
+      return file_path;
+    }
   } catch (error) {
-    console.log(error);
-    throw 'ERROR';
+    throw "ERROR";
   }
 }
 
@@ -46,11 +50,11 @@ router.get(
     const height: string = req.query.height;
     console.log('start');
     try {
-      const file_path = await resizeImage(name, width, height);
-      console.log('done');
+      const file_path = await resizeImage(req, res, name, width, height);
+      if (file_path === 'error') throw "error"
       res.status(200).sendFile(path.resolve(file_path));
     } catch (error) {
-      res.send({ status: 'ERROR' });
+      res.send({ status: false, msg:req.errMsg });
     }
   }
 );
