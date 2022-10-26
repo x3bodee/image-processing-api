@@ -13,3 +13,4 @@ app.use('/resize', resize_route_1.default);
 app.listen(PORT, function () {
     console.log("app running on port: ".concat(PORT));
 });
+exports.default = app;

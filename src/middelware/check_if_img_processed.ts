@@ -12,11 +12,11 @@ const check = (req: Request, res: Response, next: NextFunction) => {
     'processed-imgs/' + name + '.jpg'
   );
   if (fs.existsSync(processed_img_path)) {
-    console.log('file exist', 'processed');
+    // console.log('file exist', 'processed');
     req.file_exist = true;
     res.status(200).sendFile(path.resolve(processed_img_path));
   } else {
-    console.log("file don't exist", 'processed');
+    // console.log("file don't exist", 'processed');
     req.file_exist = false;
     next();
   }
