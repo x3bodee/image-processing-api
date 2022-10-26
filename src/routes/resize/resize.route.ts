@@ -16,21 +16,24 @@ async function resizeImage(
 ): Promise<string> {
   const width_i: number = parseInt(width);
   const height_i: number = parseInt(height);
-  const file_path: string = path.join( __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg` );
+  const file_path: string = path.join(
+    __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg`
+  );
   try {
-    if (req.error) return "error";
+    if (req.error) return 'error';
     else {
-
       await sharp(path.join(__dirname + '/../../../assets/' + name + '.jpg'))
-      .resize({
-        width: width_i,
-        height: height_i,
-      })
-      .toFile(file_path);
+        .resize({
+          width: width_i,
+          height: height_i,
+        })
+        .toFile(file_path);
       return file_path;
     }
   } catch (error) {
-    throw "ERROR";
+    console.log(error);
+    req.errMsg?.push('' + error);
+    return 'error';
   }
 }
 
@@ -40,6 +43,7 @@ router.get(
   check_if_img_processed,
   check_if_img_exist,
   async (
+    // eslint-disable-next-line @typescript-eslint/ban-types
     req: Request<{}, {}, {}, { name: string; width: string; height: string }>,
     res: Response
   ) => {
@@ -50,11 +54,13 @@ router.get(
     const height: string = req.query.height;
     console.log('start');
     try {
+      if (req.error) throw new Error('error');
       const file_path = await resizeImage(req, res, name, width, height);
-      if (file_path === 'error') throw "error"
+      if (file_path === 'error') throw new Error('error');
       res.status(200).sendFile(path.resolve(file_path));
     } catch (error) {
-      res.send({ status: false, msg:req.errMsg });
+      console.log(req.errMsg);
+      res.status(400).send({ status: false, error: req.errMsg });
     }
   }
 );
