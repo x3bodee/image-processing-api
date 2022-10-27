@@ -8,12 +8,12 @@ const check = (req: Request, res: Response, next: NextFunction) => {
     '../../assets/' + req.query.name + '.jpg'
   );
   if (fs.existsSync(assets_img_path)) {
-    console.log('file exist', 'assets');
+    // console.log('file exist', 'assets');
     req.file_exist = true;
     next();
   } else {
-    console.log("file don't exist", 'assets');
-    req.errMsg.push("file don't exist");
+    // console.log("file don't exist", 'assets');
+    req.errMsg?.push("file don't exist");
     req.error = true;
     //   res
     //     .status(400)

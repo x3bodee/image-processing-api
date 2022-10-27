@@ -73,7 +73,7 @@ function resizeImage(req, res, name, width, height) {
                 case 4: return [3 /*break*/, 6];
                 case 5:
                     error_1 = _b.sent();
-                    console.log(error_1);
+                    // console.log(error);
                     (_a = req.errMsg) === null || _a === void 0 ? void 0 : _a.push('' + error_1);
                     return [2 /*return*/, 'error'];
                 case 6: return [2 /*return*/];
@@ -88,12 +88,9 @@ req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log('file exist in assets = ', req.file_exist);
-                console.log("".concat(req.query.name, "-").concat(req.query.width, "-").concat(req.query.height));
                 name = req.query.name;
                 width = req.query.width;
                 height = req.query.height;
-                console.log('start');
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -108,7 +105,8 @@ req, res) { return __awaiter(void 0, void 0, void 0, function () {
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();
-                res.status(400).send({ status: false, msg: req.errMsg });
+                // console.log(req.errMsg);
+                res.status(400).send({ status: false, error: req.errMsg });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

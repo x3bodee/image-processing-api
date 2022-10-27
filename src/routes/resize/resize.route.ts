@@ -31,7 +31,7 @@ async function resizeImage(
       return file_path;
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     req.errMsg?.push('' + error);
     return 'error';
   }
@@ -47,19 +47,19 @@ router.get(
     req: Request<{}, {}, {}, { name: string; width: string; height: string }>,
     res: Response
   ) => {
-    console.log('file exist in assets = ', req.file_exist);
-    console.log(`${req.query.name}-${req.query.width}-${req.query.height}`);
+    // console.log('file exist in assets = ', req.file_exist);
+    // console.log(`${req.query.name}-${req.query.width}-${req.query.height}`);
     const name: string = req.query.name;
     const width: string = req.query.width;
     const height: string = req.query.height;
-    console.log('start');
+    // console.log('start');
     try {
       if (req.error) throw new Error('error');
       const file_path = await resizeImage(req, res, name, width, height);
       if (file_path === 'error') throw new Error('error');
       res.status(200).sendFile(path.resolve(file_path));
     } catch (error) {
-      console.log(req.errMsg);
+      // console.log(req.errMsg);
       res.status(400).send({ status: false, error: req.errMsg });
     }
   }
