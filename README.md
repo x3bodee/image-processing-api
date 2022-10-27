@@ -12,6 +12,12 @@ this is the endpoint ``` localhost:3000/resize ```, but you need to provide 3 qu
 * height:
  must contains a value greater than 0
 
+### example:
+* this will pass: ``` localhost:3000/resize?name=icelandwaterfall&width=500&height=300 ```
+
+* this will not pass:
+``` localhost:3000/resize?name=icelandwaterfall&height=300 ``` ``` --> ``` width is missing.
+
 # npm run commands:
 
 * build:
