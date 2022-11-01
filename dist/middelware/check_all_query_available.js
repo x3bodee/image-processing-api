@@ -7,7 +7,7 @@ var isPositive_1 = __importDefault(require("../helper/isPositive"));
 var check_Query = function (
 // eslint-disable-next-line @typescript-eslint/ban-types
 req, res, next) {
-    var _a;
+    var _a, _b;
     req.errMsg = [];
     // console.log(req.query);
     if (!req.query.name || !req.query.width || !req.query.height) {
@@ -19,8 +19,15 @@ req, res, next) {
     }
     if (!(0, isPositive_1.default)(parseInt(req.query.width)) ||
         !(0, isPositive_1.default)(parseInt(req.query.height))) {
-        var msg = 'width & height must contines positive values';
+        var msg = 'width & height must contines positive values (INPUT > 0)';
         (_a = req.errMsg) === null || _a === void 0 ? void 0 : _a.push(msg);
+        req.error = true;
+        // res.status(400).json({status:false, msg});
+        next();
+    }
+    if (isNaN(Number(req.query.width)) || isNaN(Number(req.query.height))) {
+        var msg = 'width & height must be positive numbers (INPUT > 0)';
+        (_b = req.errMsg) === null || _b === void 0 ? void 0 : _b.push(msg);
         req.error = true;
         // res.status(400).json({status:false, msg});
         next();

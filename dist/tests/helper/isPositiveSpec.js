@@ -10,6 +10,3 @@ it('expect isPositive(500) to be True', function () {
 it('expect isPositive(-350) to be False', function () {
     expect((0, isPositive_1.default)(-350)).toBeFalse();
 });
-it('expect isPositive(100) to be False', function () {
-    expect((0, isPositive_1.default)(100)).toBeFalse();
-});
