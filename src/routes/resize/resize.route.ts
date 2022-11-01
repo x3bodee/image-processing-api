@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
-import sharp from 'sharp';
 import path from 'path';
 import check_if_img_processed from '../../middelware/check_if_img_processed';
 import check_if_img_exist from '../../middelware/check_if_img_exist';
 import check_Query from '../../middelware/check_all_query_available';
+import resizer from '../../helper/resizer';
 
 const router = express.Router();
 
@@ -16,22 +16,14 @@ async function resizeImage(
 ): Promise<string> {
   const width_i: number = parseInt(width);
   const height_i: number = parseInt(height);
-  const file_path: string = path.join(
-    __dirname + `/../../../processed-imgs/${name}-${width}-${height}.jpg`
-  );
   try {
     if (req.error) return 'error';
     else {
-      await sharp(path.join(__dirname + '/../../../assets/' + name + '.jpg'))
-        .resize({
-          width: width_i,
-          height: height_i,
-        })
-        .toFile(file_path);
-      return file_path;
+      const result = await resizer(name, width_i, height_i);
+      if (result == 'error') req.errMsg?.push('' + result);
+      return result;
     }
   } catch (error) {
-    // console.log(error);
     req.errMsg?.push('' + error);
     return 'error';
   }

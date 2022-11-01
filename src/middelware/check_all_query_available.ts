@@ -19,12 +19,21 @@ const check_Query = (
     !isPositive(parseInt(req.query.width)) ||
     !isPositive(parseInt(req.query.height))
   ) {
-    const msg = 'width & height must contines positive values';
+    const msg = 'width & height must contines positive values (INPUT > 0)';
     req.errMsg?.push(msg);
     req.error = true;
     // res.status(400).json({status:false, msg});
     next();
   }
+
+  if (isNaN(Number(req.query.width)) || isNaN(Number(req.query.height))) {
+    const msg = 'width & height must be positive numbers (INPUT > 0)';
+    req.errMsg?.push(msg);
+    req.error = true;
+    // res.status(400).json({status:false, msg});
+    next();
+  }
+
   req.error = false;
   next();
 };

@@ -39,72 +39,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
+var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
-var check_if_img_processed_1 = __importDefault(require("../../middelware/check_if_img_processed"));
-var check_if_img_exist_1 = __importDefault(require("../../middelware/check_if_img_exist"));
-var check_all_query_available_1 = __importDefault(require("../../middelware/check_all_query_available"));
-var resizer_1 = __importDefault(require("../../helper/resizer"));
-var router = express_1.default.Router();
-function resizeImage(req, res, name, width, height) {
-    var _a, _b;
+function resizer(name, width, height) {
     return __awaiter(this, void 0, void 0, function () {
-        var width_i, height_i, result, error_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var file_path, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    width_i = parseInt(width);
-                    height_i = parseInt(height);
-                    _c.label = 1;
+                    file_path = path_1.default.join(__dirname + "/../../processed-imgs/".concat(name, "-").concat(width, "-").concat(height, ".jpg"));
+                    _a.label = 1;
                 case 1:
-                    _c.trys.push([1, 5, , 6]);
-                    if (!req.error) return [3 /*break*/, 2];
-                    return [2 /*return*/, 'error'];
-                case 2: return [4 /*yield*/, (0, resizer_1.default)(name, width_i, height_i)];
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, (0, sharp_1.default)(path_1.default.join(__dirname + '/../../assets/' + name + '.jpg'))
+                            .resize({
+                            width: width,
+                            height: height,
+                        })
+                            .toFile(file_path)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, file_path];
                 case 3:
-                    result = _c.sent();
-                    if (result == 'error')
-                        (_a = req.errMsg) === null || _a === void 0 ? void 0 : _a.push('' + result);
-                    return [2 /*return*/, result];
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    error_1 = _c.sent();
-                    (_b = req.errMsg) === null || _b === void 0 ? void 0 : _b.push('' + error_1);
+                    error_1 = _a.sent();
                     return [2 /*return*/, 'error'];
-                case 6: return [2 /*return*/];
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-router.get('/?', check_all_query_available_1.default, check_if_img_processed_1.default, check_if_img_exist_1.default, function (
-// eslint-disable-next-line @typescript-eslint/ban-types
-req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, width, height, file_path, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                name = req.query.name;
-                width = req.query.width;
-                height = req.query.height;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                if (req.error)
-                    throw new Error('error');
-                return [4 /*yield*/, resizeImage(req, res, name, width, height)];
-            case 2:
-                file_path = _a.sent();
-                if (file_path === 'error')
-                    throw new Error('error');
-                res.status(200).sendFile(path_1.default.resolve(file_path));
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _a.sent();
-                // console.log(req.errMsg);
-                res.status(400).send({ status: false, error: req.errMsg });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
-exports.default = router;
+exports.default = resizer;
